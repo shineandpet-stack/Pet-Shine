@@ -1,0 +1,24 @@
+// products.json wird geladen und gerendert
+async function loadProducts(){
+  const res = await fetch('products.json');
+  const products = await res.json();
+  const container = document.getElementById('products') || document.getElementById('featured');
+  products.forEach(p=>{
+    const el = document.createElement('div');
+    el.className = 'product-card';
+    el.innerHTML = `
+      <img src="${p.image}" alt="${p.name}" />
+      <h3>${p.name}</h3>
+      <p class="price">${p.price.toFixed(2)} €</p>
+      <button class="btn add-to-cart" data-id="${p.id}">Add</button>
+    `;
+    container.appendChild(el);
+  });
+  document.querySelectorAll('.add-to-cart').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+      addToCart(btn.dataset.id);
+      alert('Added to cart');
+    });
+  });
+}
+loadProducts();
