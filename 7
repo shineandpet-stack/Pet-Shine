@@ -1,0 +1,51 @@
+// Einfacher Cart im localStorage, sendet Bestellung an Backend /create-checkout-session
+let cart = JSON.parse(localStorage.getItem('ps_cart') || '[]');
+
+function addToCart(id){
+  cart.push(id);
+  localStorage.setItem('ps_cart', JSON.stringify(cart));
+}
+
+function renderCart(){
+  const out = document.getElementById('cart-items');
+  out.innerHTML = '';
+  if(!cart.length){ out.innerHTML = '<p>Dein Warenkorb ist leer.</p>'; return; }
+  fetch('products.json').then(r=>r.json()).then(products=>{
+    let total = 0;
+    cart.forEach((id, idx)=>{
+      const p = products.find(x=>x.id === id);
+      total += p.price;
+      const div = document.createElement('div');
+      div.className = 'cart-row';
+      div.innerHTML = `${p.name} — ${p.price.toFixed(2)} € <button data-idx="${idx}">Remove</button>`;
+      out.appendChild(div);
+    });
+    document.getElementById('cart-summary').innerHTML = `<h3>Total: ${total.toFixed(2)} €</h3>`;
+    out.querySelectorAll('button').forEach(b=>{
+      b.addEventListener('click', e=>{
+        const idx = parseInt(e.target.dataset.idx);
+        cart.splice(idx,1);
+        localStorage.setItem('ps_cart', JSON.stringify(cart));
+        renderCart();
+      });
+    });
+  });
+}
+renderCart();
+
+document.getElementById('checkout-btn')?.addEventListener('click', async ()=>{
+  if(!cart.length){ alert('Warenkorb ist leer'); return; }
+  // Send cart items to backend to create Stripe session
+  const res = await fetch('/create-checkout-session', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({items: cart})
+  });
+  const data = await res.json();
+  if(data.url){
+    // Redirect zu Stripe Checkout
+    window.location = data.url;
+  } else {
+    alert('Checkout failed');
+  }
+});
