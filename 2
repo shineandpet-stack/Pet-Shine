@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width,initial-scale=1" />
+ <title>Pet & Shine — Home</title>
+ <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+ <header class="site-header">
+   <div class="container">
+     <h1 id="shop-name">Pet & Shine</h1>
+     <nav>
+       <a href="index.html" data-i18n="nav.home">Home</a>
+       <a href="shop.html" data-i18n="nav.shop">Shop</a>
+       <a href="cart.html" data-i18n="nav.cart">Cart</a>
+       <select id="lang-select">
+         <option value="de">DE</option>
+         <option value="en">EN</option>
+       </select>
+     </nav>
+   </div>
+ </header>
+
+ <main class="container">
+   <section class="hero">
+     <h2 data-i18n="hero.title">Electro Jewelry & Pet Supplies</h2>
+     <p data-i18n="hero.subtitle">Style for you, comfort for your pet</p>
+     <a class="btn" href="shop.html" data-i18n="hero.cta">Shop Now</a>
+   </section>
+
+   <section id="featured" class="products-grid">
+     <!-- Products injected by app.js -->
+   </section>
+ </main>
+
+ <footer class="site-footer">
+   <div class="container">
+     <p>© <span id="year"></span> Pet & Shine</p>
+   </div>
+ </footer>
+
+ <script src="assets/js/i18n.js"></script>
+ <script src="assets/js/app.js"></script>
+</body>
+</html>
